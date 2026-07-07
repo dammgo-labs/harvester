@@ -1,0 +1,8 @@
+# Harvester Dependencies
+# Core text processing and network
+requests>=2.31.0
+feedparser>=6.0.10
+python-dotenv>=1.0.1
+
+# Testing
+pytest>=8.0.0
