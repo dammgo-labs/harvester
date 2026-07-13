@@ -15,6 +15,7 @@ from core.lens_parser import LensParser
 from core.bouncer import Bouncer
 from core.ledger import Ledger
 from connectors.rss_pull import parse_rss_feed
+from connectors.arxiv_pull import fetch_arxiv_results
 
 def generate_markdown_drop(dto, lens, output_dir):
     date_str = time.strftime("%Y-%m-%d")
@@ -63,42 +64,54 @@ def main():
     print(f"[*] Drop path resolved to: {lens.drop_path}")
     
     rss_sources = lens.target_sources.get("rss", [])
+    arxiv_enabled = lens.target_sources.get("arxiv", False)
     
-    if not rss_sources:
-        print("[*] No RSS feeds defined in SCOUT_LENS.json. Exiting.")
+    if not rss_sources and not arxiv_enabled:
+        print("[*] No RSS feeds or arXiv sources defined in SCOUT_LENS.json. Exiting.")
         return
 
     gems_found = 0
     noise_dropped = 0
     duplicate_skipped = 0
+    
+    dtos_to_process = []
 
     for feed_url in rss_sources:
         print(f"[*] Fetching RSS feed: {feed_url}")
         try:
             response = requests.get(feed_url, timeout=10)
             response.raise_for_status()
-            dtos = parse_rss_feed(response.text)
+            dtos_to_process.extend(parse_rss_feed(response.text))
         except Exception as e:
             print(f"[!] Failed to fetch {feed_url}: {e}")
             continue
-
-        for dto in dtos:
-            if ledger.is_processed(dto.source_url):
-                duplicate_skipped += 1
+            
+    if arxiv_enabled:
+        for keyword in lens.deep_keywords:
+            print(f"[*] Fetching arXiv for keyword: {keyword}")
+            try:
+                dtos_to_process.extend(fetch_arxiv_results(keyword))
+            except Exception as e:
+                print(f"[!] Failed to fetch arXiv for {keyword}: {e}")
                 continue
-            
-            # Anotamos en el ledger sin importar si pasa o no.
-            # No queremos volver a gastar CPU evaluando basura conocida.
-            ledger.mark_processed(dto.source_url)
-            
-            # El Cadenero evalúa el DTO Soberano
-            combined_text = f"{dto.title} {dto.content}"
-            if bouncer.passes_filter(combined_text):
-                print(f"[+] GEM FOUND: {dto.title}")
-                generate_markdown_drop(dto, lens, lens.drop_path)
-                gems_found += 1
-            else:
-                noise_dropped += 1
+
+    for dto in dtos_to_process:
+        if ledger.is_processed(dto.source_url):
+            duplicate_skipped += 1
+            continue
+        
+        # Anotamos en el ledger sin importar si pasa o no.
+        # No queremos volver a gastar CPU evaluando basura conocida.
+        ledger.mark_processed(dto.source_url)
+        
+        # El Cadenero evalúa el DTO Soberano
+        combined_text = f"{dto.title} {dto.content}"
+        if bouncer.passes_filter(combined_text):
+            print(f"[+] GEM FOUND: {dto.title}")
+            generate_markdown_drop(dto, lens, lens.drop_path)
+            gems_found += 1
+        else:
+            noise_dropped += 1
 
     print(f"[*] Harvester run complete.")
     print(f"    - Duplicados saltados: {duplicate_skipped}")
