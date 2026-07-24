@@ -26,10 +26,10 @@ class LensParser:
 
     @property
     def drop_path(self):
-        # We need to expand $ATLAS_ROOT if present
+        # We need to expand $ATLAS_ROOT_PATH if present
         path = self.config.get("delivery_protocol", {}).get("path", "./inbox")
-        atlas_root = os.environ.get("ATLAS_ROOT", "")
+        atlas_root = os.environ.get("ATLAS_ROOT_PATH", "")
         if atlas_root:
-            path = path.replace("$ATLAS_ROOT", atlas_root)
+            path = path.replace("$ATLAS_ROOT_PATH", atlas_root)
         # Normaliza la ruta según el SO, elimina diagonales mixtas
         return os.path.normpath(path)
