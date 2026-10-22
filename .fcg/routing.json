@@ -1,0 +1,32 @@
+{
+  "fcg_topology_version": "1.0",
+  "domain_id": "harvester",
+  "domain_type": "project",
+  "execution_constraints": {
+    "allow_standalone": false,
+    "requires_parent": "dammgo-labs"
+  },
+  "bus": {
+    "path": ".fcg/bus/cross_memory.log",
+    "k_max": 8,
+    "tau": 0.72
+  },
+  "subordinates": [
+    {
+      "agent_id": "fcg_topologist_01",
+      "archetype_id": "fcg_topologist",
+      "description": "ZTAA structural topologist. Exclusively authorized to modify the ecosystem topology (.fcg/). DO NOT use for application software design.",
+      "contract_path": ".fcg/contracts/fcg_topologist_contract.md",
+      "signature_path": ".fcg/contracts/fcg_topologist_contract.md.sig",
+      "expected_key": "pub_key_top01_fcg0"
+    },
+    {
+      "agent_id": "fcg_compliance_auditor_01",
+      "archetype_id": "fcg_compliance_auditor",
+      "description": "Validation and QA agent with strict Read-Only permissions. Cannot modify files or write code.",
+      "contract_path": ".fcg/contracts/fcg_compliance_auditor_contract.md",
+      "signature_path": ".fcg/contracts/fcg_compliance_auditor_contract.md.sig",
+      "expected_key": "pub_key_caud01_c3d4"
+    }
+  ]
+}

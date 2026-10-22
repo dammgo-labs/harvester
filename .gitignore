@@ -1,3 +1,27 @@
+# FCG Ephemeral Runtime - Ignore content, keep structure
+.fcg/volatile/*
+.fcg/bus/*
+.fcg/knowledge/events/*
+
+# Keep structure
+!.fcg/volatile/.gitkeep
+!.fcg/bus/.gitkeep
+!.fcg/knowledge/events/.gitkeep
+
+# Keep examples as docs (publics)
+!.fcg/bus/*.example
+!.fcg/knowledge/events/*.example
+!.fcg/knowledge/sacred/*.example
+
+# OS/System
+.DS_Store
+Thumbs.db
+
+# Python compliance
+__pycache__/
+*.pyc
+
+
 # Environments
 .venv/
 .env

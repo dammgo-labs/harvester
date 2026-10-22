@@ -1,0 +1,2 @@
+{"event_type":"KNOWLEDGE_RETRIEVAL","sender":"researcher_01","seq_num":1,"payload":"selective(K_sacred, 'core identity')","expected_key":"pub_key_rsch01_x9f2","hmac":"HMAC-SHA256:d8b2c4f1a234e908b76...f9e"}
+{"event_type":"TASK_COMPLETE","sender":"researcher_01","seq_num":2,"payload":"Analysis finalized, waiting for next instruction","expected_key":"pub_key_rsch01_x9f2","hmac":"HMAC-SHA256:a1c2b3d4e5f6g7h8i9j...k0l"}

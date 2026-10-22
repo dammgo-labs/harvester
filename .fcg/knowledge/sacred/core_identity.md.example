@@ -1,0 +1,17 @@
+---
+tier: "K_sacred"
+lifecycle: "append-only, low churn, part of TCB"
+access: "request-only via ℬ with event.type=KNOWLEDGE_RETRIEVAL"
+---
+
+# Core Identity - Example Sacred Knowledge
+
+This is 𝒦_sacred. It is part of the Trusted Computing Base (TCB).
+
+- Organization: Example Corp
+- Mission: Build sovereign agentic systems
+- Non-negotiable: All agents must respect CWD Axiom ./ only
+
+This file is NO MOUNT. Agents cannot read it directly. They must request via:
+HMAC-SHA256(payload+seq_num, expected_key) -> .fcg/bus/cross_memory.log
+Engine will selective() inject if relevance ≥ τ=0.72 and |selective| ≤ k_max=8

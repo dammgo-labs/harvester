@@ -1,0 +1,16 @@
+---
+tier: "K_event"
+lifecycle: "append-only, high churn, not part of TCB"
+---
+
+# 2026-07-26 - Kickoff Meeting
+
+## Decisions
+- Adopted FCG Spec v1.0
+- Routing table initialized with researcher_01
+
+## Action Items
+- [ ] Validate v_delim_escape with 10k fuzz
+- [ ] Implement EngineHSM verify_signature_content()
+
+This is 𝒦_event. High churn, audit only. Also NO MOUNT, selective(k_max, τ).
